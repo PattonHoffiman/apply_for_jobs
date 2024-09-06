@@ -1,0 +1,12 @@
+{
+  "title": "GET Analyze Schema",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": ["password"],
+  "properties": {
+    "password": {
+      "type": "string",
+      "description": "Password passed by user"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+org: pattonhoffiman
+
+service: store-password-service
+
+package:
+  patterns:
+    - '!layer/python'
+    - '!aws_requirements.txt'
+
+layers:
+  libs:
+    name: PostStoreLibs
+    description: 'Necessary libs for function works'
+
+    compatibleRuntimes:
+      - python3.12
+    
+    package:
+      artifact: layer/libs.zip
+
+
+provider:
+  name: aws
+  memorySize: 256
+  region: sa-east-1
+  runtime: python3.12
+
+  iam:
+    role:
+      name: store-password-role
+      managedPolicies:
+        - ${env:policy}
+      statements:
+        - Effect: 'Allow'
+          Resource: '*'
+          Action: 'dynamo:ListTables'
+        - Effect: 'Allow'
+          Resource: ${env:resource}
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:CreateTable'
+
+  layers:
+    - ${env:layer}
+
+  apiGateway:
+    restApiId: ${env:restApiId}
+    restApiRootResourceId: ${env:restApiRootResourceId}
+
+functions:
+  generate:
+    handler: handler.handler
+
+    events:
+      - http:
+          path: store
+          method: post
+
+          request:
+            schemas:
+              application/json:
+                name: PostStoreModel
+                schema: ${file(./api_schema/post_store_schema.json)}
+                description: 'Model Validation for Store Sending Passwords'
+    

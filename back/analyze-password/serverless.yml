@@ -1,0 +1,31 @@
+org: pattonhoffiman
+
+service: analyze-password-service
+
+provider:
+  name: aws
+  memorySize: 256
+  region: sa-east-1
+  runtime: python3.12
+
+  apiGateway:
+    restApiId: ${env:restApiId}
+    restApiRootResourceId: ${env:restApiRootResourceId}
+
+functions:
+  generate:
+    handler: handler.handler
+
+    events:
+      - http:
+          path: analyze
+          method: post
+          cors: true
+
+          request:
+            schemas:
+              application/json:
+                name: PostAnalyzeModel
+                schema: ${file(./api_schema/post_analyze_schema.json)}
+                description: 'Model Validation for Analyze Sending Passwords'
+              

@@ -1,0 +1,36 @@
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Serverless directories
+.serverless
+
+# Back End
+back/*/.env
+back/*.serverless
+back/*/layer/*
+
+# Front End
+front/.env
+front/.next
+front/README.md
+front/.gitignore
+front/node_modules
+front/next-env.d.ts
+
+# Docs
+docs/*.bkp

@@ -1,0 +1,29 @@
+org: pattonhoffiman
+
+service: generate-password-service
+
+provider:
+  name: aws
+  memorySize: 256
+  region: sa-east-1
+  runtime: python3.12
+
+  apiGateway:
+    restApiId: ${env:restApiId}
+    restApiRootResourceId: ${env:restApiRootResourceId}
+
+functions:
+  generate:
+    handler: handler.handler
+
+    events:
+      - http:
+          path: generate
+          method: get
+          cors: true
+
+          request:
+            parameters:
+              querystrings:
+                length: true
+                complexity: true

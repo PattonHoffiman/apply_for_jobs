@@ -1,0 +1,1 @@
+declare type ComplexityType = 'lower' | 'upper' | 'special' | 'numeric';

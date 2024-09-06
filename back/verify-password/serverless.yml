@@ -1,0 +1,61 @@
+org: pattonhoffiman
+
+service: verify-password
+
+package:
+  patterns:
+    - '!layer/python'
+    - '!aws_requirements.txt'
+
+layers:
+  libs:
+    name: PutVerifyLibs
+    description: 'Necessary libs for function works'
+
+    compatibleRuntimes:
+      - python3.12
+
+    package:
+      artifact: layer/libs.zip
+
+provider:
+  name: aws
+  memorySize: 256
+  region: sa-east-1
+  runtime: python3.12
+
+  iam:
+    role:
+      name: update-password-role
+      managedPolicies:
+        - ${env:policy}
+      statements:
+        - Effect: 'Allow'
+          Resource: '*'
+          Action: 'dynamodb:ListTables'
+        - Effect: 'Allow'
+          Resource: ${env:resource}
+          Action:
+              - 'dynamodb:GetItem'
+              - 'dynamodb:PutItem'
+              - 'dynamodb:DeleteItem'
+  layers:
+    - ${env:layer}
+
+  apiGateway:
+    restApiId: ${env:restApiId}
+    restApiRootResourceId: ${env:restApiRootResourceId}
+
+functions:
+  generate:
+    handler: handler.handler
+  
+    events:
+      - http:
+          path: verify/{id}
+          method: put
+
+          request:
+            paths:
+              id: true
+      

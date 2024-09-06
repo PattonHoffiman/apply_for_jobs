@@ -1,0 +1,24 @@
+{
+  "title": "GET Tokenize Schema",
+  "$schema":"http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": ["enc", "salt", "times", "expires"],
+  "properties": {
+    "enc": {
+      "type": "string",
+      "description": "Encrypted send data"
+    },
+    "salt": {
+      "type": "string",
+      "description": "Salt value"
+    },
+    "times": {
+      "type": "integer",
+      "description": "Number of times the password can be displayed"
+    },
+    "expires": {
+      "type": "string",
+      "description": "Time it takes for the password to expire"
+    }
+  }
+}
