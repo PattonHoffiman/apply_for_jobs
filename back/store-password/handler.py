@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 import dotenv
 import boto3
 import uuid
@@ -75,8 +75,8 @@ def handler(event, context):
     table.wait_until_exists();
 
   def validate_expires(date: str):
-    insertion_date = datetime.strptime(date, '%m-%d-%Y');
-    time_compare = datetime.now() - insertion_date;
+    insertion_date = datetime.fromisoformat(date);
+    time_compare = datetime.now().replace(tzinfo=timezone.utc) - insertion_date;
 
     if (time_compare.days > 60):
       raise ValueError("Can't store expire dates with more than 60 days.")

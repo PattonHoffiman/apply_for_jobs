@@ -1,4 +1,1 @@
-pyaes
-pyjwt
-bcrypt
 python-dotenv
